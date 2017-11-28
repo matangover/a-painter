@@ -18,13 +18,17 @@
     <script src="https://unpkg.com/aframe-gltf-exporter-component/dist/aframe-gltf-exporter-component.min.js"></script>
     <script src="vendor/aframe-teleport-controls.min.js"></script>
     <script src="vendor/aframe-tooltip-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v2.1.0/dist/aframe-physics-system.min.js"></script>
+    <script src="https://unpkg.com/super-hands@2.1.0/dist/super-hands.min.js"></script>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="manifest.webmanifest">
   </head>
   <body>
-    <a-scene>
+    <a-scene physics>
       <a-assets>
         <img id="skymap" src="assets/images/sky.jpg" crossorigin="anonymous">
         <img id="uinormal" src="assets/images/ui-normal.png" crossorigin="anonymous">
@@ -33,11 +37,38 @@
         <a-asset-item id="logomtl" src="assets/models/logo.mtl"></a-asset-item>
         <a-asset-item id="uiobj" src="assets/models/ui.obj"></a-asset-item>
         <a-asset-item id="hitEntityObj" src="assets/models/teleportHitEntity.obj"></a-asset-item>
+        
+        <a-mixin id="cube" geometry="primitive: box; width: 0.33; height: 0.33; depth: 0.33"
+                 hoverable grabbable stretchable draggable
+                 dynamic-body shadow></a-mixin>
+        <a-mixin id="cube-hovered" material="opacity: 0.7; transparent: true">
+        </a-mixin>
+        <a-mixin id="cube-dragover" material="wireframe: true;"></a-mixin>
       </a-assets>
+      
+      <!-- <a-entity progressive-controls>
+        <a-entity id="rhand" class="right-controller"></a-entity>
+        <a-entity id="lhand" class="left-controller"></a-entity>
+      </a-entity> -->
+
+
       <a-light type="point" light="color: #fff; intensity:0.6" position="3 10 1"></a-light>
       <a-light type="point" light="color: #fff; intensity:0.2" position="-3 -10 0"></a-light>
       <a-light type="hemisphere" groundColor="#888" intensity="0.8"></a-light>
       <a-entity id="logo" obj-model="obj: #logoobj; mtl: #logomtl"></a-entity>
+      
+      <!-- <a-sphere id="sphere" position="0 1.25 -5" radius="0.5" color="#EF2D5E" hoverable grabbable></a-sphere> -->
+      <a-entity class="cube" mixin="cube" position="0 0.265 -1" material="color: red"></a-entity>
+      <a-entity class="cube" mixin="cube" position="0 0.265 -0.5" material="color: red"></a-entity>
+      <a-entity class="cube" mixin="cube" position="-1 0.265 -1" material="color: blue"></a-entity>
+      <a-entity class="cube" mixin="cube" position="-1 0.265 -0.5" material="color: blue"></a-entity>
+      <a-entity class="cube" mixin="cube" position="1 0.265 -1" material="color: green"></a-entity>
+      <a-entity class="cube" mixin="cube" position="1 0.265 -0.5" material="color: green"></a-entity>
+      <!-- <a-entity id="cube" geometry="primitive: box; width: 0.33; height: 0.33; depth: 0.33"
+         hoverable grabbable stretchable draggable
+         dynamic-body shadow></a-mixin> -->
+
+
       <!--geometry="primitive: circle; radius: 12;"
       rotation="-90 0 0"-->
       <a-entity id="hitEntityLeft" material="shader:flat; color: #ff3468" obj-model="obj: #hitEntityObj"></a-entity>
@@ -45,7 +76,7 @@
 
       <a-entity id="ground"
                 geometry="primitive: box; width: 12; height: 0.01; depth: 12"
-                material="shader: flat; src: #floor">
+                material="shader: flat; src: #floor" static-body>
               </a-entity>
       <a-entity id="cameraRig">
         <!-- camera -->
@@ -56,7 +87,8 @@
                   if-no-vr-headset="visible: false"
                   paint-controls="hand: left"
                   teleport-controls="cameraRig: #cameraRig; button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityLeft"
-                  ui>
+                  ui
+                  tracked-controls>
                     <a-entity class="vive-tooltips" visible="false">
                       <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png"
                                 position="0.1 0.025 0.048"
@@ -116,7 +148,8 @@
                   if-no-vr-headset="visible: false"
                   paint-controls="hand: right"
                   teleport-controls="cameraRig: #cameraRig; button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityRight"
-                  ui>
+                  ui
+                  tracked-controls>
                     <a-entity class="vive-tooltips" visible="false">
                       <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png"
                                 position="0.1 0.025 0.048"
