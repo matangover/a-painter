@@ -10,44 +10,34 @@ AFRAME.registerComponent('grab', {
     this.GRABBED_STATE = 'grabbed';
     // Bind event handlers
     this.onHit = this.onHit.bind(this);
-    this.onGripOpen = this.onGripOpen.bind(this);
-    this.onGripClose = this.onGripClose.bind(this);
+    this.onToggleGrab = this.onToggleGrab.bind(this);
   },
 
   play: function () {
     var el = this.el;
     el.addEventListener('hit', this.onHit);
-    el.addEventListener('gripclose', this.onGripClose);
-    el.addEventListener('gripopen', this.onGripOpen);
-    el.addEventListener('thumbup', this.onGripClose);
-    el.addEventListener('thumbdown', this.onGripOpen);
-    el.addEventListener('pointup', this.onGripClose);
-    el.addEventListener('pointdown', this.onGripOpen);
+    el.addEventListener('togglegrab', this.onToggleGrab);
   },
 
   pause: function () {
     var el = this.el;
     el.removeEventListener('hit', this.onHit);
-    el.removeEventListener('gripclose', this.onGripClose);
-    el.removeEventListener('gripopen', this.onGripOpen);
-    el.removeEventListener('thumbup', this.onGripClose);
-    el.removeEventListener('thumbdown', this.onGripOpen);
-    el.removeEventListener('pointup', this.onGripClose);
-    el.removeEventListener('pointdown', this.onGripOpen);
+    el.removeEventListener('togglegrab', this.onToggleGrab);
   },
 
-  onGripClose: function (evt) {
-    this.grabbing = true;
-    delete this.previousPosition;
-  },
-
-  onGripOpen: function (evt) {
-    var hitEl = this.hitEl;
-    this.grabbing = false;
-    if (!hitEl) { return; }
-    hitEl.removeState(this.GRABBED_STATE);
-    hitEl.emit('grabend');
-    this.hitEl = undefined;
+  onToggleGrab: function (evt) {
+    // console.log("TOGGLE GRAB");
+    if (!this.grabbing) {
+      this.grabbing = true;
+      delete this.previousPosition;
+    } else {
+      var hitEl = this.hitEl;
+      this.grabbing = false;
+      if (!hitEl) { return; }
+      hitEl.removeState(this.GRABBED_STATE);
+      hitEl.emit('grabend');
+      this.hitEl = undefined;    
+    }
   },
 
   onHit: function (evt) {
@@ -58,6 +48,7 @@ AFRAME.registerComponent('grab', {
     if (!hitEl || hitEl.is(this.GRABBED_STATE) || !this.grabbing || this.hitEl) { return; }
     hitEl.addState(this.GRABBED_STATE);
     this.hitEl = hitEl;
+    hitEl.emit('grab');
   },
 
   tick: function () {
@@ -74,6 +65,7 @@ AFRAME.registerComponent('grab', {
   },
 
   updateDelta: function () {
+    // TODO: handle teleport
     var currentPosition = this.el.getAttribute('position');
     if (!this.previousPosition) {
       this.previousPosition = new THREE.Vector3();

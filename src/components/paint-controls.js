@@ -33,6 +33,7 @@ AFRAME.registerComponent('paint-controls', {
 
     el.addEventListener('changeBrushSizeInc', function (evt) {
       if (evt.detail.axis[0] === 0 && evt.detail.axis[1] === 0 || self.previousAxis === evt.detail.axis[1]) { return; }
+      if (!self.el.getAttribute('brush')) return;
 
       if (self.touchStarted) {
         self.touchStarted = false;

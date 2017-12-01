@@ -20,7 +20,7 @@
     <script src="vendor/aframe-tooltip-component.min.js"></script>
     <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>
-    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v2.1.0/dist/aframe-physics-system.min.js"></script>
+    <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v2.1.0/dist/aframe-physics-system.min.js"></script> -->
     <script src="https://unpkg.com/super-hands@2.1.0/dist/super-hands.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@4.0.1/dist/aframe-event-set-component.min.js"></script>
     <link rel="stylesheet" href="css/main.css">
@@ -40,10 +40,10 @@
         <a-asset-item id="hitEntityObj" src="assets/models/teleportHitEntity.obj"></a-asset-item>
         
         <a-mixin id="cube" geometry="primitive: box; width: 0.33; height: 0.33; depth: 0.33"
-          event-set__grab="material.color: #FFEF4F"
-          event-set__grabend="material.color: #F2E646"
-          event-set__hit="material.color: #F2E646"
-          event-set__hitend="material.color: #EF2D5E"
+          event-set__grab="material.wireframe: true"
+          event-set__grabend="material.wireframe: false"
+          event-set__hit="material.opacity: 0.7; material.transparent: true"
+          event-set__hitend="material.opacity: 1; material.transparent: false"
           shadow></a-mixin>
         <a-mixin id="cube-hovered" material="opacity: 0.7; transparent: true">
         </a-mixin>
@@ -70,7 +70,7 @@
       
       <!-- <a-sphere id="sphere" position="0 1.25 -5" radius="0.5" color="#EF2D5E" hoverable grabbable></a-sphere> -->
       <a-entity class="cube" mixin="cube" position="0 0.265 -1" material="color: red"
-        sound="src: url(assets/sounds/slip_away/MBIRA.mp3); autoplay: true"></a-entity>
+        sound="src: url(assets/sounds/slip_away/MBIRA.mp3)"></a-entity>
       <a-entity class="cube" mixin="cube" position="0 0.265 -0.5" material="color: red"
         sound="src: url(assets/sounds/slip_away/GUITARS.mp3)"></a-entity>
       <a-entity class="cube" mixin="cube" position="-1 0.265 -1" material="color: blue"
@@ -93,7 +93,7 @@
 
       <a-entity id="ground"
                 geometry="primitive: box; width: 12; height: 0.01; depth: 12"
-                material="shader: flat; src: #floor" static-body>
+                material="shader: flat; src: #floor">
               </a-entity>
       <a-entity id="cameraRig">
         <!-- camera -->

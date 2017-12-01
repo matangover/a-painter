@@ -10,7 +10,7 @@ AFRAME.registerSystem('painter', {
         common: {
           // gripdown: 'undo',
           triggerchanged: 'paint',
-          gripdown: 'toggleGrab'
+          gripdown: 'togglegrab'
         },
 
         'vive-controls': {
