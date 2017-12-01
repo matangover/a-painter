@@ -172,6 +172,9 @@ AFRAME.registerSystem('painter', {
     });
 
     console.info('A-PAINTER Version: ' + this.version);
+    // Emulate vive controller connection.
+    document.getElementById("right-hand").emit("controllerconnected", {name: 'vive-controls', component: {data:{hand: 'right'}}});
+    document.getElementById("left-hand").emit("controllerconnected", {name: 'vive-controls', component: {data:{hand: 'left'}}});
   },
   saveJSON: function () {
     var json = this.brushSystem.getJSON();
