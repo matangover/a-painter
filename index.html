@@ -13,13 +13,14 @@
     <script src="https://ucarecdn.com/widget/2.5.5/uploadcare/uploadcare.full.min.js"></script>
     <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/v1.5.12/dist/clipboard.min.js"></script>
     <script src="vendor/aframe-v0.7.0.min.js"></script>
-    <script src="vendor/aframe-input-mapping-component.min.js"></script>
+    <!-- <script src="vendor/aframe-input-mapping-component.min.js"></script> -->
+    <script src="https://unpkg.com/aframe-input-mapping-component/dist/aframe-input-mapping-component.js"></script>
     <script src="build.js"></script>
     <script src="https://unpkg.com/aframe-gltf-exporter-component/dist/aframe-gltf-exporter-component.min.js"></script>
     <script src="vendor/aframe-teleport-controls.min.js"></script>
     <script src="vendor/aframe-tooltip-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.min.js"></script>
-    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.js"></script>
+    <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script> -->
     <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v2.1.0/dist/aframe-physics-system.min.js"></script> -->
     <script src="https://unpkg.com/super-hands@2.1.0/dist/super-hands.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@4.0.1/dist/aframe-event-set-component.min.js"></script>
@@ -29,7 +30,7 @@
     <link rel="manifest" href="manifest.webmanifest">
   </head>
   <body>
-    <a-scene>
+    <a-scene inspector="url: https://unpkg.com/aframe-inspector@0.7.x/dist/aframe-inspector.js">
       <a-assets>
         <img id="skymap" src="assets/images/sky.jpg" crossorigin="anonymous">
         <img id="uinormal" src="assets/images/ui-normal.png" crossorigin="anonymous">
