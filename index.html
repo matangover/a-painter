@@ -44,6 +44,13 @@
         <a-mixin id="cube-hovered" material="opacity: 0.7; transparent: true">
         </a-mixin>
         <a-mixin id="cube-dragover" material="wireframe: true;"></a-mixin>
+        
+        <!-- <audio id="mbira" src="assets/sounds/slip_away/MBIRA.mp3" preload="auto"></audio>
+        <audio id="guitars" src="assets/sounds/slip_away/GUITARS.mp3" preload="auto"></audio>
+        <audio id="lead_vocals" src="assets/sounds/slip_away/LEAD_VOCALS.mp3" preload="auto"></audio>
+        <audio id="synths_and_piano" src="assets/sounds/slip_away/SYNTHS_AND_PIANO.mp3" preload="auto"></audio>
+        <audio id="drums" src="assets/sounds/slip_away/DRUMS.mp3" preload="auto"></audio>
+        <audio id="bass_and_bass_synths" src="assets/sounds/slip_away/BASS_AND_BASS_SYNTHS.mp3" preload="auto"></audio> -->
       </a-assets>
       
       <!-- <a-entity progressive-controls>
@@ -58,12 +65,18 @@
       <a-entity id="logo" obj-model="obj: #logoobj; mtl: #logomtl"></a-entity>
       
       <!-- <a-sphere id="sphere" position="0 1.25 -5" radius="0.5" color="#EF2D5E" hoverable grabbable></a-sphere> -->
-      <a-entity class="cube" mixin="cube" position="0 0.265 -1" material="color: red"></a-entity>
-      <a-entity class="cube" mixin="cube" position="0 0.265 -0.5" material="color: red"></a-entity>
-      <a-entity class="cube" mixin="cube" position="-1 0.265 -1" material="color: blue"></a-entity>
-      <a-entity class="cube" mixin="cube" position="-1 0.265 -0.5" material="color: blue"></a-entity>
-      <a-entity class="cube" mixin="cube" position="1 0.265 -1" material="color: green"></a-entity>
-      <a-entity class="cube" mixin="cube" position="1 0.265 -0.5" material="color: green"></a-entity>
+      <a-entity class="cube" mixin="cube" position="0 0.265 -1" material="color: red"
+        sound="src: url(assets/sounds/slip_away/MBIRA.mp3); autoplay: true"></a-entity>
+      <a-entity class="cube" mixin="cube" position="0 0.265 -0.5" material="color: red"
+        sound="src: url(assets/sounds/slip_away/GUITARS.mp3)"></a-entity>
+      <a-entity class="cube" mixin="cube" position="-1 0.265 -1" material="color: blue"
+        sound="src: url(assets/sounds/slip_away/LEAD_VOCALS.mp3)"></a-entity>
+      <a-entity class="cube" mixin="cube" position="-1 0.265 -0.5" material="color: blue"
+        sound="src: url(assets/sounds/slip_away/SYNTHS_AND_PIANO.mp3)"></a-entity>
+      <a-entity class="cube" mixin="cube" position="1 0.265 -1" material="color: green"
+        sound="src: url(assets/sounds/slip_away/DRUMS.mp3)"></a-entity>
+      <a-entity class="cube" mixin="cube" position="1 0.265 -0.5" material="color: green"
+        sound="src: url(assets/sounds/slip_away/BASS_AND_BASS_SYNTHS.mp3)"></a-entity>
       <!-- <a-entity id="cube" geometry="primitive: box; width: 0.33; height: 0.33; depth: 0.33"
          hoverable grabbable stretchable draggable
          dynamic-body shadow></a-mixin> -->
