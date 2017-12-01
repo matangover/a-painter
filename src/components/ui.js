@@ -576,8 +576,10 @@ AFRAME.registerComponent('ui', {
     this.initColorHistory();
     this.initBrushesMenu();
     this.setCursorTransparency();
-    this.updateColorUI(this.el.getAttribute('brush').color);
-    this.updateSizeSlider(this.el.getAttribute('brush').size);
+    if (this.el.getAttribute('brush')) {
+      this.updateColorUI(this.el.getAttribute('brush').color);
+      this.updateSizeSlider(this.el.getAttribute('brush').size);
+    }
   },
 
   initBrushesMenu: function () {
@@ -808,7 +810,9 @@ AFRAME.registerComponent('ui', {
     }
     currentColor.material = currentColor.material.clone();
     currentColor.material.map = this.system.selectedTexture;
-    this.updateColorHistory();
+    if (this.el.components.brush) {
+      this.updateColorHistory();
+    }
   },
 
   updateColorHistory: function () {

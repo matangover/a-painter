@@ -4,7 +4,7 @@ AFRAME.registerSystem('paint-controls', {
 
 /* globals AFRAME THREE */
 AFRAME.registerComponent('paint-controls', {
-  dependencies: ['brush'],
+  // dependencies: ['brush'],
 
   schema: {
     hand: {default: 'left'}
@@ -183,9 +183,10 @@ AFRAME.registerComponent('paint-controls', {
     buttonMeshes.colorTip = controllerObject3D.getObjectByName('tip');
 
     this.modelLoaded = true;
-
-    this.changeBrushSize(this.el.components.brush.data.size);
-    this.changeBrushColor(this.el.components.brush.color);
+    if (this.el.components.brush) {
+      this.changeBrushSize(this.el.components.brush.data.size);
+      this.changeBrushColor(this.el.components.brush.color);
+    }
   },
 
   onButtonEvent: function (id, evtName) {

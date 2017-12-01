@@ -8,8 +8,9 @@ AFRAME.registerSystem('painter', {
     var mappings = {
       default: {
         common: {
-          gripdown: 'undo',
-          triggerchanged: 'paint'
+          // gripdown: 'undo',
+          triggerchanged: 'paint',
+          gripdown: 'toggleGrab'
         },
 
         'vive-controls': {
