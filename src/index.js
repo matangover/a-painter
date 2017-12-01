@@ -20,6 +20,7 @@ require('./components/ui.js');
 require('./components/ui-raycaster.js');
 require('./components/grab.js');
 require('./components/aabb-collider.js');
+require('./components/track.js');
 
 require('./brushes/line.js');
 require('./brushes/stamp.js');

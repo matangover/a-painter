@@ -46,6 +46,7 @@
           event-set__grabend="material.wireframe: false"
           event-set__hit="material.opacity: 0.7; material.transparent: true"
           event-set__hitend="material.opacity: 1; material.transparent: false"
+          track
           shadow></a-mixin>
         <a-mixin id="cube-hovered" material="opacity: 0.7; transparent: true">
         </a-mixin>
@@ -72,9 +73,9 @@
       
       <!-- <a-sphere id="sphere" position="0 1.25 -5" radius="0.5" color="#EF2D5E" hoverable grabbable></a-sphere> -->
       <a-entity class="cube" mixin="cube" position="0 0.265 -1" material="color: red"
-        sound="src: url(assets/sounds/slip_away/MBIRA.mp3)"></a-entity>
-      <a-entity class="cube" mixin="cube" position="0 0.265 -0.5" material="color: red"
         sound="src: url(assets/sounds/slip_away/GUITARS.mp3)"></a-entity>
+      <a-entity class="cube" mixin="cube" position="0 0.265 -0.5" material="color: red"
+        sound="src: url(assets/sounds/slip_away/MBIRA.mp3)"></a-entity>
       <a-entity class="cube" mixin="cube" position="-1 0.265 -1" material="color: blue"
         sound="src: url(assets/sounds/slip_away/LEAD_VOCALS.mp3)"></a-entity>
       <a-entity class="cube" mixin="cube" position="-1 0.265 -0.5" material="color: blue"
