@@ -123,10 +123,10 @@ AFRAME.registerComponent('paint-controls', {
     });
     
     // Emulate vive controller connection.
-    el.emit("controllerconnected", {
-      name: 'vive-controls',
-      component: {data: {hand: this.data.hand}}
-    });
+    // el.emit("controllerconnected", {
+    //   name: 'vive-controls',
+    //   component: {data: {hand: this.data.hand}}
+    // });
   },
 
   changeBrushColor: function (color) {
