@@ -35,7 +35,7 @@ AFRAME.registerComponent('grab', {
       this.grabbing = false;
       if (!hitEl) { return; }
       hitEl.removeState(this.GRABBED_STATE);
-      hitEl.emit('grabend');
+      hitEl.emit('grabend', {hand: this.el});
       this.hitEl = undefined;    
     }
   },
@@ -48,7 +48,7 @@ AFRAME.registerComponent('grab', {
     if (!hitEl || hitEl.is(this.GRABBED_STATE) || !this.grabbing || this.hitEl) { return; }
     hitEl.addState(this.GRABBED_STATE);
     this.hitEl = hitEl;
-    hitEl.emit('grab');
+    hitEl.emit('grab', {hand: this.el});
   },
 
   tick: function () {

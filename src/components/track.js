@@ -21,6 +21,11 @@ AFRAME.registerComponent('track', {
   },
 
   onGrab: function (evt) {
+    event.detail.hand.setAttribute('brush', {
+      enabled: true,
+      color: this.el.getAttribute('material').color
+    });
+    
     sound = this.el.components.sound;
     // Hack: we know poolSize is always 0.
     // All tracks have something at 61 seconds.
@@ -30,6 +35,8 @@ AFRAME.registerComponent('track', {
   },
   
   onGrabEnd: function (evt) {
+    event.detail.hand.setAttribute('brush', {enabled: false});
+    
     this.el.components.sound.pause();
   }
 });
