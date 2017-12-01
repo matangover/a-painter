@@ -22,13 +22,14 @@
     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>
     <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v2.1.0/dist/aframe-physics-system.min.js"></script>
     <script src="https://unpkg.com/super-hands@2.1.0/dist/super-hands.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@4.0.1/dist/aframe-event-set-component.min.js"></script>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="manifest.webmanifest">
   </head>
   <body>
-    <a-scene physics>
+    <a-scene>
       <a-assets>
         <img id="skymap" src="assets/images/sky.jpg" crossorigin="anonymous">
         <img id="uinormal" src="assets/images/ui-normal.png" crossorigin="anonymous">
@@ -39,8 +40,11 @@
         <a-asset-item id="hitEntityObj" src="assets/models/teleportHitEntity.obj"></a-asset-item>
         
         <a-mixin id="cube" geometry="primitive: box; width: 0.33; height: 0.33; depth: 0.33"
-                 hoverable grabbable stretchable draggable
-                 dynamic-body shadow></a-mixin>
+          event-set__grab="material.color: #FFEF4F"
+          event-set__grabend="material.color: #F2E646"
+          event-set__hit="material.color: #F2E646"
+          event-set__hitend="material.color: #EF2D5E"
+          shadow></a-mixin>
         <a-mixin id="cube-hovered" material="opacity: 0.7; transparent: true">
         </a-mixin>
         <a-mixin id="cube-dragover" material="wireframe: true;"></a-mixin>
@@ -100,7 +104,8 @@
                   disabled__if-no-vr-headset="visible: false"
                   paint-controls="hand: left"
                   teleport-controls="cameraRig: #cameraRig; button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityLeft"
-                  ui>
+                  ui
+                  aabb-collider="objects: .cube;" grab>
                     <a-entity class="vive-tooltips" visible="false">
                       <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png"
                                 position="0.1 0.025 0.048"
@@ -160,7 +165,8 @@
                   disabled__if-no-vr-headset="visible: false"
                   paint-controls="hand: right"
                   teleport-controls="cameraRig: #cameraRig; button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityRight"
-                  ui>
+                  ui
+                  aabb-collider="objects: .cube;" grab>
                     <a-entity class="vive-tooltips" visible="false">
                       <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png"
                                 position="0.1 0.025 0.048"
