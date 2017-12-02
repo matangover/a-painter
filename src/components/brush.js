@@ -91,5 +91,6 @@ AFRAME.registerComponent('brush', {
   startNewStroke: function () {
     this.currentStroke = this.system.addNewStroke(this.data.brush, this.color, this.data.size);
     this.el.emit('stroke-started', {entity: this.el, stroke: this.currentStroke});
+    this.currentStroke.track = this.el.components.grab.hitEl.components.track.data.id;
   }
 });

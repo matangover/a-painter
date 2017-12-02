@@ -110,7 +110,8 @@ AFRAME.registerBrush = function (name, definition, options) {
           'position': position.clone(),
           'orientation': orientation.clone(),
           'pressure': pressure,
-          'timestamp': timestamp
+          'timestamp': timestamp,
+          'time': Date.now()
         });
 
         this.data.prevPosition = position.clone();

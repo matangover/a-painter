@@ -29,8 +29,13 @@ AFRAME.registerComponent('track', {
       enabled: true,
       color: this.el.getAttribute('material').color
     });
-    
-    sound = this.el.components.sound;
+    this.el.sceneEl.systems.painter.trackStartTimes[this.data.id] = Date.now();    
+    this.playSound();
+  },
+  
+  playSound() {
+    // TODO: handle multiple plays of same track
+    var sound = this.el.components.sound;
     // Hack: we know poolSize is always 0.
     // All tracks have something at 61 seconds.
     // NOTE: In the newest version of Three.js, startTime is renamed to offset!
