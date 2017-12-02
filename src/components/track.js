@@ -3,6 +3,10 @@
 /**
 */
 AFRAME.registerComponent('track', {
+  schema: {
+    id: {type: 'string'}
+  },
+  
   init: function () {
     this.onGrab = this.onGrab.bind(this);
     this.onGrabEnd = this.onGrabEnd.bind(this);
