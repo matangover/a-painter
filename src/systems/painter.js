@@ -214,7 +214,7 @@ AFRAME.registerSystem('painter', {
       // }
       // stroke.groups etc
       if (currentPointIndex == -1) currentPointIndex = Infinity;
-      stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex);
+      stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex * 2);
     });
   },
   saveJSON: function () {
