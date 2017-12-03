@@ -1,5 +1,5 @@
 /* globals AFRAME THREE BinaryManager */
-var VERSION = 1;
+var VERSION = 1337;
 
 AFRAME.BRUSHES = {};
 
@@ -40,7 +40,8 @@ AFRAME.registerBrush = function (name, definition, options) {
           'orientation': Utils.arrayNumbersToFixed(point.orientation.toArray()),
           'position': Utils.arrayNumbersToFixed(point.position.toArray()),
           'pressure': Utils.numberToFixed(point.pressure),
-          'timestamp': point.timestamp
+          'timestamp': point.timestamp,
+          'offset': Utils.numberToFixed(point.offset)
         });
       }
 
@@ -49,6 +50,7 @@ AFRAME.registerBrush = function (name, definition, options) {
           index: system.getUsedBrushes().indexOf(this.brushName),
           color: Utils.arrayNumbersToFixed(this.data.color.toArray()),
           size: Utils.numberToFixed(this.data.size),
+          track: this.track
         },
         points: points
       };
@@ -345,6 +347,7 @@ AFRAME.registerSystem('brush', {
         new THREE.Color().fromArray(brush.color),
         brush.size
       );
+      stroke.track = brush.track;
 
       for (var j = 0; j < strokeData.points.length; j++) {
         var point = strokeData.points[j];
@@ -356,6 +359,8 @@ AFRAME.registerSystem('brush', {
 
         var pointerPosition = this.getPointerPosition(position, orientation);
         stroke.addPoint(position, orientation, pointerPosition, pressure, timestamp);
+        var addedPoint = stroke.data.points[stroke.data.numPoints - 1];
+        addedPoint.offset = point.offset;
       }
     }
   },

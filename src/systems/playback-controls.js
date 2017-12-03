@@ -104,6 +104,9 @@ AFRAME.registerSystem('playback-controls', {
   },
   
   getPaintingOffset: function() {
+    if (!this.paintingTrack) {
+      return null;
+    }
     // TODO: support multiple painting tracks
     // Get AudioContext object through internal Three.js attributes
     //var audio = this.paintingTrack.components.sound.pool.children[0];
