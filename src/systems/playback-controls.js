@@ -135,8 +135,17 @@ AFRAME.registerSystem('playback-controls', {
   
   toggleTrackMute: function(trackId) {
     var trackEl = this.getTrackEl(trackId);
-    var currentVolume = trackEl.getAttribute('sound').volume;
-    trackEl.setAttribute('sound', 'volume', 1 - currentVolume);
+    var newVolume = 1 - trackEl.getAttribute('sound').volume;
+    var muted = newVolume == 0;
+    trackEl.setAttribute('sound', 'volume', newVolume);
+    this.sceneEl.systems.brush.strokes.forEach(function (stroke) {
+      if (stroke.track != trackId) {
+        return;
+      }
+      
+      stroke.object3D.children[0].material.transparent = true;
+      stroke.object3D.children[0].material.opacity = muted ? 0.2 : 1;
+    });
   },
   
   stopPaintingTrack: function(trackEl) {
