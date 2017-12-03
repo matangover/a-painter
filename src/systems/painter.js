@@ -158,9 +158,9 @@ AFRAME.registerSystem('painter', {
       if (event.keyCode === 85) { // u - upload
         self.upload();
       }
-      if (event.keyCode === 86) { // v - save
-        self.save();
-      }
+      // if (event.keyCode === 86) { // v - save
+      //   self.save();
+      // }
       if (event.keyCode === 74) { // j - save json
         self.saveJSON();
       }
@@ -170,6 +170,12 @@ AFRAME.registerSystem('painter', {
         for (var i = 0; i < templateItems.length; i++) {
             templateItems[i].setAttribute('visible', self.showTemplateItems);
         }
+      }
+      if (event.keyCode === 80) { // p - play/pause all tracks
+        self.sceneEl.systems['playback-controls'].togglePlaying();
+      }
+      if (event.keyCode === 66) { // b - reset playback offset
+        self.sceneEl.systems['playback-controls'].resetPlaybackOffset();
       }
     });
 

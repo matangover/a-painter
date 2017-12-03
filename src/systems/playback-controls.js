@@ -7,12 +7,12 @@ AFRAME.registerSystem('playback-controls', {
     this.playingOffset = 0;
     this.playing = false;
     
-    this.onTogglePlaying = this.onTogglePlaying.bind(this);
-    document.querySelector('#right-hand').addEventListener('menudown', this.onTogglePlaying);
+    this.togglePlaying = this.togglePlaying.bind(this);
+    document.querySelector('#right-hand').addEventListener('menudown', this.togglePlaying);
     //document.querySelector('#right-hand').addEventListener('menudown', this.onTogglePlaying);
   },
   
-  onTogglePlaying: function() {
+  togglePlaying: function() {
     if (this.playing) {
       this.pauseAllTracks();
     } else {
@@ -45,20 +45,34 @@ AFRAME.registerSystem('playback-controls', {
     console.log("PAUSE TRACKS");
     this.playing = false;
     self.sceneEl.querySelectorAll("[track]").forEach(function (trackEl) {
-      trackEl.components.sound.pauseSound();
+      trackEl.components.sound.stopSound();
       trackEl.setAttribute("material", "opacity", 1);
       trackEl.setAttribute("scale", "1 1 1");
     });
+  },
+  
+  resetPlaybackOffset: function() {
+    this.playingOffset = 0;
+    if (this.playing) {
+      this.pauseAllTracks();
+      this.playAllTracks();
+    } else {
+      this.updateStrokes();
+    }
   },
   
   tick: function(time, delta) {
     if (!this.playing) {
       return;
     }
-    self = this;
     // TODO: take the playing offset from the AudioContext for better accuracy?
     // TODO: loop it?
     this.playingOffset += delta;
+    this.updateStrokes();
+  },
+  
+  updateStrokes: function() {
+    self = this;
     this.sceneEl.systems.brush.strokes.forEach(function (stroke) {
       var currentPointIndex = stroke.data.points.findIndex(function (point) {
         return point.offset * 1000 > self.playingOffset;
