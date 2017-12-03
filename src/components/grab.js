@@ -65,7 +65,7 @@ AFRAME.registerComponent('grab', {
   },
 
   updateDelta: function () {
-    // TODO: handle teleport
+    // TODO: handle teleport while grabbing
     var currentPosition = this.el.getAttribute('position');
     if (!this.previousPosition) {
       this.previousPosition = new THREE.Vector3();

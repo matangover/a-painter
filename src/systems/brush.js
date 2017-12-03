@@ -106,12 +106,13 @@ AFRAME.registerBrush = function (name, definition, options) {
       }
       if (addPointMethod.call(this, position, orientation, pointerPosition, pressure, timestamp)) {
         this.data.numPoints++;
+        var sceneEl = document.querySelector('a-scene');
         this.data.points.push({
           'position': position.clone(),
           'orientation': orientation.clone(),
           'pressure': pressure,
           'timestamp': timestamp,
-          'time': Date.now()
+          'offset': sceneEl.systems['playback-controls'].getPaintingOffset()
         });
 
         this.data.prevPosition = position.clone();

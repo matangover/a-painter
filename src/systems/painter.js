@@ -17,7 +17,7 @@ AFRAME.registerSystem('painter', {
           axismove: 'changeBrushSizeInc',
           trackpadtouchstart: 'startChangeBrushSize',
           // menudown: 'toggleMenu',
-          menudown: 'playTracks',
+          // menudown: 'togglePlaying',
 
           // Teleport
           trackpaddown: 'aim',
@@ -174,59 +174,8 @@ AFRAME.registerSystem('painter', {
     });
 
     console.info('A-PAINTER Version: ' + this.version);
-    
-    this.trackStartTimes = {};
-    this.playingOffset = 0;
-    document.addEventListener('playTracks', function (event) {
-      console.log("PLAY TRACKS");
-      if (self.playing) {
-        console.log("ALREADY PLAYING");
-        return;
-      }
-      self.sceneEl.querySelectorAll("[track]").forEach(function (trackEl) {
-        trackEl.components.track.playSound();
-        trackEl.setAttribute("material", "opacity", 0.5);
-        trackEl.setAttribute("scale", "0.3 0.3 0.3");
-      });
-      self.playingOffset = 0;
-      self.playing = true;
-    });
   },
-  tick: function(time, delta) {
-    if (!this.playing) {
-      return;
-    }
-    self = this;
-    this.playingOffset += delta;
-    this.brushSystem.strokes.forEach(function (stroke) {
-      var trackStartTime = self.trackStartTimes[stroke.track];
-      if (!trackStartTime) {
-        console.warn("No track start time!", stroke);
-        return;
-      }
-      
-      var currentPointIndex = stroke.data.points.findIndex(function (point) {
-        return (point.time - trackStartTime) > self.playingOffset;
-      });
-      // if (!stroke.originalMaterial) {
-      //   stroke.originalMaterial = stroke.material.clone();
-      //   stroke.hiddenMaterial = stroke.material.clone();
-      //   stroke.hiddenMaterial.visible = false;
-      //   stroke.material = [stroke.originalMaterial, stroke.hiddenMaterial];
-      // }
-      // stroke.groups etc
-      if (currentPointIndex == -1) currentPointIndex = Infinity;
-      // In the line brush, each point is actually comprised of two vertices.
-      stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex * 2);
-      
-      // Move the track object to the last point, if the stroke is currently playing.
-      if (currentPointIndex != 0 && currentPointIndex != Infinity) {
-        var trackEl = document.querySelector("[track='id: " + stroke.track + "']");
-        var newPosition = stroke.data.points[currentPointIndex].position;
-        trackEl.setAttribute("position", newPosition);
-      }
-    });
-  },
+  
   saveJSON: function () {
     var json = this.brushSystem.getJSON();
     var blob = new Blob([JSON.stringify(json)], {type: 'application/json'});
