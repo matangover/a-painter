@@ -23,10 +23,11 @@
     <!-- <script src="https://unpkg.com/aframe-motion-capture-components/dist/aframe-motion-capture-components.js"></script> -->
     <!-- <script src="https://unpkg.com/aframe-motion-capture-components@0.2.6/dist/aframe-motion-capture-components.js"></script> -->
     <script src="vendor/aframe-motion-capture-components.js"></script>
-    <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script> -->
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>
     <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v2.1.0/dist/aframe-physics-system.min.js"></script> -->
     <script src="https://unpkg.com/super-hands@2.1.0/dist/super-hands.min.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@4.0.1/dist/aframe-event-set-component.min.js"></script>
+    <!-- <script src="https://unpkg.com/aframe-keyboard-controls@1.3.0/dist/aframe-keyboard-controls.min.js"></script> -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
     <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
@@ -101,7 +102,7 @@
               </a-entity>
       <a-entity id="cameraRig">
         <!-- camera -->
-        <a-entity id="acamera" camera look-controls orbit-controls wasd-controls></a-entity>
+        <a-entity id="acamera" camera orbit-controls universal-controls></a-entity>
         <!-- hand controls -->
         <a-entity id="left-hand"
                   disabled__brush
