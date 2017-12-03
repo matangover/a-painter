@@ -91,11 +91,14 @@ AFRAME.registerSystem('playback-controls', {
       // Move the track object to the last point, if the stroke is currently playing.
       // (There might be several strokes for the same track.)
       if (currentPointIndex != 0 && currentPointIndex != stroke.data.numPoints) {
-        var trackEl = document.querySelector("[track='id: " + stroke.track + "']");
         var newPosition = stroke.data.points[currentPointIndex].position;
-        trackEl.setAttribute("position", newPosition);
+        self.getTrackEl(stroke.track).setAttribute("position", newPosition);
       }
     });
+  },
+  
+  getTrackEl: function(trackId) {
+    return document.querySelector("[track='id: " + trackId + "']");
   },
   
   playTrack: function(trackEl, offset) {
@@ -128,6 +131,12 @@ AFRAME.registerSystem('playback-controls', {
     //return audio.context.currentTime - audio;
     var audio = this.getAudio(this.paintingTrack);
     return audio.context.currentTime -  audio.realStartTime;
+  },
+  
+  toggleTrackMute: function(trackId) {
+    var trackEl = this.getTrackEl(trackId);
+    var currentVolume = trackEl.getAttribute('sound').volume;
+    trackEl.setAttribute('sound', 'volume', 1 - currentVolume);
   },
   
   stopPaintingTrack: function(trackEl) {
