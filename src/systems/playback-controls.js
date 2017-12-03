@@ -84,12 +84,13 @@ AFRAME.registerSystem('playback-controls', {
       //   stroke.material = [stroke.originalMaterial, stroke.hiddenMaterial];
       // }
       // stroke.groups etc
-      if (currentPointIndex == -1) currentPointIndex = Infinity;
+      if (currentPointIndex == -1) currentPointIndex = stroke.data.numPoints;
       // In the line brush, each point is actually comprised of two vertices.
       stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex * 2);
       
       // Move the track object to the last point, if the stroke is currently playing.
-      if (currentPointIndex != 0 && currentPointIndex != Infinity) {
+      // (There might be several strokes for the same track.)
+      if (currentPointIndex != 0 && currentPointIndex != stroke.data.numPoints) {
         var trackEl = document.querySelector("[track='id: " + stroke.track + "']");
         var newPosition = stroke.data.points[currentPointIndex].position;
         trackEl.setAttribute("position", newPosition);
