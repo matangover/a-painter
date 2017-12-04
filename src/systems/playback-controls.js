@@ -34,8 +34,6 @@ AFRAME.registerSystem('playback-controls', {
     this.sceneEl.querySelectorAll("[track]").forEach(function (trackEl) {
       //trackEl.components.track.playSound(this.playingOffset);
       self.playTrack(trackEl, self.playingOffset / 1000);
-      trackEl.setAttribute("material", "opacity", 0.5);
-      trackEl.setAttribute("scale", "0.3 0.3 0.3");
     });
     //this.playingOffset = 0;
     this.playing = true;
@@ -48,10 +46,8 @@ AFRAME.registerSystem('playback-controls', {
   pauseAllTracks: function() {
     console.log("PAUSE TRACKS");
     this.playing = false;
-    self.sceneEl.querySelectorAll("[track]").forEach(function (trackEl) {
+    this.sceneEl.querySelectorAll("[track]").forEach(function (trackEl) {
       trackEl.components.sound.stopSound();
-      trackEl.setAttribute("material", "opacity", 1);
-      trackEl.setAttribute("scale", "1 1 1");
     });
   },
   
@@ -66,6 +62,7 @@ AFRAME.registerSystem('playback-controls', {
   },
   
   tick: function(time, delta) {
+    this.updateTracks();
     if (!this.playing) {
       return;
     }
@@ -85,7 +82,7 @@ AFRAME.registerSystem('playback-controls', {
     stroke.originalMaterial.transparent = true;
     stroke.hiddenMaterial = strokeMesh.material.clone();
     stroke.hiddenMaterial.transparent = true;
-    stroke.hiddenMaterial.opacity = 0.1;
+    stroke.hiddenMaterial.opacity = 0.3;
     strokeMesh.material = [stroke.originalMaterial, stroke.hiddenMaterial];
   },
   
@@ -114,6 +111,14 @@ AFRAME.registerSystem('playback-controls', {
         var newPosition = stroke.data.points[currentPointIndex].position;
         self.getTrackEl(stroke.track).setAttribute("position", newPosition);
       }
+    });
+  },
+  
+  updateTracks: function() {
+    var self = this;
+    this.sceneEl.querySelectorAll("[track]").forEach(function (trackEl) {
+      trackEl.setAttribute("material", "opacity", self.playing ? 0.5 : 1);
+      trackEl.setAttribute("scale", self.playing ? "0.3 0.3 0.3" : "1 1 1");
     });
   },
   
@@ -181,8 +186,10 @@ AFRAME.registerSystem('playback-controls', {
       }
       self.ensureDoubleMaterial(stroke);
       //stroke.object3D.children[0].material.transparent = true;
-      stroke.object3D.children[0].material[0].opacity = muted ? 0.4 : 1;
-      stroke.object3D.children[0].material[1].opacity = muted ? 0.05 : 0.1;
+      // stroke.object3D.children[0].material[0].opacity = muted ? 0.4 : 1;
+      // stroke.object3D.children[0].material[1].opacity = muted ? 0.05 : 0.1;
+      stroke.object3D.children[0].material[0].wireframe = muted;
+      stroke.object3D.children[0].material[1].wireframe = muted;
     });
   },
   
@@ -221,9 +228,9 @@ AFRAME.registerSystem('playback-controls', {
     }
   },
   
-  handleRayIntersection: function(trackId, offset) {
+  handleRayIntersection: function(intersectedTrackId, offset) {
     if (this.playing) {
-      this.toggleTrackMute(trackId);           
+      this.toggleTrackMute(intersectedTrackId);           
       // if (this.isTrackMuted(trackId)) {
       //   // Intersected track is muted - unmute it.
       //   this.toggleTrackMute(trackId);           
@@ -236,7 +243,7 @@ AFRAME.registerSystem('playback-controls', {
       // Mue all tracks but the intersected one.
       var self = this;
       this.getTrackIds().forEach(function (trackId) {
-        var muted = trackId != trackId;
+        var muted = intersectedTrackId != trackId;
         self.setTrackMute(trackId, muted);
       });
       this.playAllTracks();
