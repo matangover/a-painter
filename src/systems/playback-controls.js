@@ -97,7 +97,7 @@ AFRAME.registerSystem('playback-controls', {
       // Move the track object to the last point, if the stroke is currently playing.
       // (There might be several strokes for the same track.)
       if (currentPointIndex != 0 && currentPointIndex != stroke.data.numPoints) {
-        var newPosition = stroke.data.points[currentPointIndex].position;
+        var newPosition = stroke.data.points[currentPointIndex - 1].position;
         self.getTrackEl(stroke.track).setAttribute("position", newPosition);
       }
     });
