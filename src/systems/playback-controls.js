@@ -30,7 +30,17 @@ AFRAME.registerSystem('playback-controls', {
       console.log("ALREADY PLAYING");
       return;
     }
-    self = this;
+    var self = this;
+    // If all tracks are muted, unmute all.
+    var allMuted = this.getTrackIds().every(function (trackId) {
+      return self.isTrackMuted(trackId);
+    });
+    if (allMuted) {
+      this.getTrackIds().forEach(function (trackId) {
+        self.setTrackMute(trackId, false);
+      });
+    }
+    
     this.sceneEl.querySelectorAll("[track]").forEach(function (trackEl) {
       //trackEl.components.track.playSound(this.playingOffset);
       self.playTrack(trackEl, self.playingOffset / 1000);
