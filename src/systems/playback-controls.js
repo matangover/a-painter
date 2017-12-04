@@ -75,6 +75,20 @@ AFRAME.registerSystem('playback-controls', {
     this.updateStrokes();
   },
   
+  ensureDoubleMaterial: function(stroke) {
+    if (!!stroke.originalMaterial) {
+      return;
+    }
+    
+    var strokeMesh = stroke.object3D.children[0];
+    stroke.originalMaterial = strokeMesh.material.clone();
+    stroke.originalMaterial.transparent = true;
+    stroke.hiddenMaterial = strokeMesh.material.clone();
+    stroke.hiddenMaterial.transparent = true;
+    stroke.hiddenMaterial.opacity = 0.1;
+    strokeMesh.material = [stroke.originalMaterial, stroke.hiddenMaterial];
+  },
+  
   updateStrokes: function() {
     self = this;
     this.sceneEl.systems.brush.strokes.forEach(function (stroke) {
@@ -82,14 +96,7 @@ AFRAME.registerSystem('playback-controls', {
         return point.offset * 1000 > self.playingOffset;
       });
       var strokeMesh = stroke.object3D.children[0];
-      if (!stroke.originalMaterial) {
-        stroke.originalMaterial = strokeMesh.material.clone();
-        stroke.originalMaterial.transparent = true;
-        stroke.hiddenMaterial = strokeMesh.material.clone();
-        stroke.hiddenMaterial.transparent = true;
-        stroke.hiddenMaterial.opacity = 0.1;
-        strokeMesh.material = [stroke.originalMaterial, stroke.hiddenMaterial];
-      }
+      self.ensureDoubleMaterial(stroke);
       if (nextPointIndex == -1) nextPointIndex = stroke.data.numPoints;
       // In the line brush, each point is actually comprised of two vertices.
       // stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex * 2);
@@ -147,15 +154,32 @@ AFRAME.registerSystem('playback-controls', {
   },
   
   toggleTrackMute: function(trackId) {
+    this.setTrackMute(trackId, !this.isTrackMuted(trackId));
+  },
+  
+  isTrackMuted: function(trackId) {
     var trackEl = this.getTrackEl(trackId);
-    var newVolume = 1 - trackEl.getAttribute('sound').volume;
-    var muted = newVolume == 0;
+    return trackEl.getAttribute('sound').volume == 0;
+  },
+  
+  setTrackMute: function(trackId, muted) {
+    var trackEl = this.getTrackEl(trackId);
+    var newVolume = muted ? 0 : 1;
     trackEl.setAttribute('sound', 'volume', newVolume);
+    
+    self = this;
+    var allMuted = this.getTrackIds().every(function (trackId) {
+      return self.isTrackMuted(trackId);
+    });
+    if (allMuted) {
+      this.pauseAllTracks();
+    }
+    
     this.sceneEl.systems.brush.strokes.forEach(function (stroke) {
       if (stroke.track != trackId) {
         return;
       }
-      
+      self.ensureDoubleMaterial(stroke);
       //stroke.object3D.children[0].material.transparent = true;
       stroke.object3D.children[0].material[0].opacity = muted ? 0.4 : 1;
       stroke.object3D.children[0].material[1].opacity = muted ? 0.05 : 0.1;
@@ -187,12 +211,42 @@ AFRAME.registerSystem('playback-controls', {
         var intersectedStroke = this.sceneEl.systems.brush.strokes.find(function (stroke) {
           return stroke.entity == closestObject;
         });
-        var intersectedOffset = intersectedStroke.data.points[intersection.faceIndex].offset;
-        console.log("Intersected track " + intersectedStroke.track +
+        var intersectedOffset = intersectedStroke.data.points[intersection.faceIndex].offset * 1000;
+        var intersectedTrack = intersectedStroke.track;
+        console.log("Intersected track " + intersectedTrack +
           ". Playing offset: " + intersectedOffset +
           ". Face index: " + intersection.faceIndex);
+        this.handleRayIntersection(intersectedTrack, intersectedOffset);
       }
     }
+  },
+  
+  handleRayIntersection: function(trackId, offset) {
+    if (this.playing) {
+      this.toggleTrackMute(trackId);           
+      // if (this.isTrackMuted(trackId)) {
+      //   // Intersected track is muted - unmute it.
+      //   this.toggleTrackMute(trackId);           
+      // } else {
+      //   // Intersected track is playing - mute it.
+      //   this.playingOffset = offset;
+      // }
+    } else {
+      this.playingOffset = offset;
+      // Mue all tracks but the intersected one.
+      var self = this;
+      this.getTrackIds().forEach(function (trackId) {
+        var muted = trackId != trackId;
+        self.setTrackMute(trackId, muted);
+      });
+      this.playAllTracks();
+    }
+  },
+  
+  getTrackIds: function() {
+    return Array.from(this.sceneEl.querySelectorAll("[track]")).map(function (trackEl) {
+      return trackEl.components.track.data.id;
+    });
   },
   
   onRayIntersection: function(event) {
