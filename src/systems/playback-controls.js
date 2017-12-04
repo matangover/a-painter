@@ -77,16 +77,22 @@ AFRAME.registerSystem('playback-controls', {
       var currentPointIndex = stroke.data.points.findIndex(function (point) {
         return point.offset * 1000 > self.playingOffset;
       });
-      // if (!stroke.originalMaterial) {
-      //   stroke.originalMaterial = stroke.material.clone();
-      //   stroke.hiddenMaterial = stroke.material.clone();
-      //   stroke.hiddenMaterial.visible = false;
-      //   stroke.material = [stroke.originalMaterial, stroke.hiddenMaterial];
-      // }
+      var strokeMesh = stroke.object3D.children[0];
+      if (!stroke.originalMaterial) {
+        stroke.originalMaterial = strokeMesh.material.clone();
+        stroke.hiddenMaterial = strokeMesh.material.clone();
+        stroke.hiddenMaterial.transparent = true;
+        stroke.hiddenMaterial.opacity = 0.1;
+        strokeMesh.material = [stroke.originalMaterial, stroke.hiddenMaterial];
+      }
       // stroke.groups etc
       if (currentPointIndex == -1) currentPointIndex = stroke.data.numPoints;
       // In the line brush, each point is actually comprised of two vertices.
-      stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex * 2);
+      // stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex * 2);
+      var geometry = strokeMesh.geometry;
+      geometry.clearGroups();
+      geometry.addGroup(0, currentPointIndex * 2, 0);
+      geometry.addGroup(currentPointIndex * 2, (stroke.data.numPoints - currentPointIndex) * 2, 1);
       
       // Move the track object to the last point, if the stroke is currently playing.
       // (There might be several strokes for the same track.)
