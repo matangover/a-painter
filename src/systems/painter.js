@@ -103,23 +103,23 @@ AFRAME.registerSystem('painter', {
       });
     }
 
-    this.startPainting = false;
-    var self = this;
-    document.addEventListener('stroke-started', function (event) {
-      if (!self.startPainting) {
-        var logo = document.getElementById('logo');
-        var mesh = logo.getObject3D('mesh');
-        var tween = new AFRAME.TWEEN.Tween({ alpha: 1.0 })
-          .to({alpha: 0.0}, 4000)
-          .onComplete(function () {
-            logo.setAttribute('visible', false);
-          })
-          .onUpdate(function () {
-            mesh.children[0].material.opacity = this.alpha;
-          }).start();
-        self.startPainting = true;
-      }
-    });
+    // this.startPainting = false;
+    // var self = this;
+    // document.addEventListener('stroke-started', function (event) {
+    //   if (!self.startPainting) {
+    //     var logo = document.getElementById('logo');
+    //     var mesh = logo.getObject3D('mesh');
+    //     var tween = new AFRAME.TWEEN.Tween({ alpha: 1.0 })
+    //       .to({alpha: 0.0}, 4000)
+    //       .onComplete(function () {
+    //         logo.setAttribute('visible', false);
+    //       })
+    //       .onUpdate(function () {
+    //         mesh.children[0].material.opacity = this.alpha;
+    //       }).start();
+    //     self.startPainting = true;
+    //   }
+    // });
 
     // @fixme This is just for debug until we'll get some UI
     document.addEventListener('keyup', function (event) {
