@@ -8,7 +8,11 @@ AFRAME.registerSystem('playback-controls', {
     this.playing = false;
     
     this.togglePlaying = this.togglePlaying.bind(this);
+    this.activatePlayingRay = this.activatePlayingRay.bind(this);
+    this.onRayIntersection = this.onRayIntersection.bind(this);
     document.querySelector('#right-hand').addEventListener('menudown', this.togglePlaying);
+    document.querySelector('#right-hand').addEventListener('triggerchanged', this.activatePlayingRay);
+    document.querySelector('#right-hand').addEventListener('raycaster-intersection', this.onRayIntersection);
     //document.querySelector('#right-hand').addEventListener('menudown', this.onTogglePlaying);
   },
   
@@ -161,5 +165,37 @@ AFRAME.registerSystem('playback-controls', {
   stopPaintingTrack: function(trackEl) {
     trackEl.components.sound.stopSound();
     this.paintingTrack = null;
+  },
+  
+  activatePlayingRay: function(event) {
+    var handEl = event.target;
+    if (handEl.components.grab.grabbing) {
+      // Paint mode - do nothing.
+      return;
+    }
+    var activated = event.detail.value > 0.1;
+    var previouslyActivated = handEl.getAttribute('raycaster').showLine;
+    handEl.setAttribute('raycaster', 'showLine', activated);
+    // This is only in A-Frame 0.7.1 but we have 0.7.0.
+    // handEl.setAttribute('raycaster', 'enabled', activated);
+    if (previouslyActivated && !activated) {
+      if (handEl.components.raycaster.intersectedEls.length != 0) {
+        var closestObject = handEl.components.raycaster.intersectedEls[0];
+        var objectIndex = this.lastIntersections.els.indexOf(closestObject);
+        var intersection = this.lastIntersections.intersections[objectIndex];
+        // console.log("Found object!", intersection);
+        var intersectedStroke = this.sceneEl.systems.brush.strokes.find(function (stroke) {
+          return stroke.entity == closestObject;
+        });
+        var intersectedOffset = intersectedStroke.data.points[intersection.faceIndex].offset;
+        console.log("Intersected track " + intersectedStroke.track +
+          ". Playing offset: " + intersectedOffset +
+          ". Face index: " + intersection.faceIndex);
+      }
+    }
+  },
+  
+  onRayIntersection: function(event) {
+    this.lastIntersections = event.detail;
   }
 });
