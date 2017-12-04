@@ -74,7 +74,7 @@ AFRAME.registerSystem('playback-controls', {
   updateStrokes: function() {
     self = this;
     this.sceneEl.systems.brush.strokes.forEach(function (stroke) {
-      var currentPointIndex = stroke.data.points.findIndex(function (point) {
+      var nextPointIndex = stroke.data.points.findIndex(function (point) {
         return point.offset * 1000 > self.playingOffset;
       });
       var strokeMesh = stroke.object3D.children[0];
@@ -86,19 +86,21 @@ AFRAME.registerSystem('playback-controls', {
         stroke.hiddenMaterial.opacity = 0.1;
         strokeMesh.material = [stroke.originalMaterial, stroke.hiddenMaterial];
       }
-      // stroke.groups etc
-      if (currentPointIndex == -1) currentPointIndex = stroke.data.numPoints;
+      if (nextPointIndex == -1) nextPointIndex = stroke.data.numPoints;
       // In the line brush, each point is actually comprised of two vertices.
       // stroke.object3D.children[0].geometry.setDrawRange(0, currentPointIndex * 2);
+      var visibleVertexCount = Math.max((nextPointIndex - 1) * 2, 0);
+      var totalVertexCount = stroke.data.numPoints * 2;
       var geometry = strokeMesh.geometry;
       geometry.clearGroups();
-      geometry.addGroup(0, currentPointIndex * 2, 0);
-      geometry.addGroup(currentPointIndex * 2, (stroke.data.numPoints - currentPointIndex) * 2, 1);
+      geometry.addGroup(0, visibleVertexCount, 0);
+      geometry.addGroup(visibleVertexCount, totalVertexCount - visibleVertexCount, 1);
       
       // Move the track object to the last point, if the stroke is currently playing.
       // (There might be several strokes for the same track.)
-      if (currentPointIndex != 0 && currentPointIndex != stroke.data.numPoints) {
-        var newPosition = stroke.data.points[currentPointIndex - 1].position;
+      if (nextPointIndex != 0 && nextPointIndex != stroke.data.numPoints) {
+        var currentPointIndex = nextPointIndex - 1;
+        var newPosition = stroke.data.points[currentPointIndex].position;
         self.getTrackEl(stroke.track).setAttribute("position", newPosition);
       }
     });
