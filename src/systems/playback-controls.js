@@ -80,6 +80,7 @@ AFRAME.registerSystem('playback-controls', {
       var strokeMesh = stroke.object3D.children[0];
       if (!stroke.originalMaterial) {
         stroke.originalMaterial = strokeMesh.material.clone();
+        stroke.originalMaterial.transparent = true;
         stroke.hiddenMaterial = strokeMesh.material.clone();
         stroke.hiddenMaterial.transparent = true;
         stroke.hiddenMaterial.opacity = 0.1;
@@ -149,8 +150,9 @@ AFRAME.registerSystem('playback-controls', {
         return;
       }
       
-      stroke.object3D.children[0].material.transparent = true;
-      stroke.object3D.children[0].material.opacity = muted ? 0.2 : 1;
+      //stroke.object3D.children[0].material.transparent = true;
+      stroke.object3D.children[0].material[0].opacity = muted ? 0.4 : 1;
+      stroke.object3D.children[0].material[1].opacity = muted ? 0.05 : 0.1;
     });
   },
   
