@@ -6,7 +6,7 @@ AFRAME.registerSystem('playback-controls', {
   init: function () {
     this.playingOffset = 0;
     this.playing = false;
-    
+    this.filters = {};
     this.togglePlaying = this.togglePlaying.bind(this);
     this.activatePlayingRay = this.activatePlayingRay.bind(this);
     this.onRayIntersection = this.onRayIntersection.bind(this);
@@ -80,6 +80,26 @@ AFRAME.registerSystem('playback-controls', {
     // TODO: loop it?
     this.playingOffset += delta;
     this.updateStrokes();
+    // this.updateFilters();
+  },
+  
+  updateFilter: function() {
+    var self = this;
+    Object.keys(this.filters).forEach(function (filter) {
+      if (filter.start >= self.playingOffset && filter.end < self.playingOffset) {
+        var trackEl = self.getTrackEl(filter.track);
+        var audio = self.getAudio(trackEl);
+        convolver = context.createConvolver();
+        convolver.buffer = this.filterPresetAssets[filter.preset];
+        gainNode2 = context.createGain();
+        gainNode2.gain.value = 2.0;
+        source.connect(convolver);
+        convolver.connect(gainNode2);
+        gainNode2.connect(context.destination);
+      } else {
+        // if ()
+      }
+    });
   },
   
   ensureDoubleMaterial: function(stroke) {
@@ -282,6 +302,19 @@ AFRAME.registerSystem('playback-controls', {
   },
   
   onRayIntersection: function(event) {
+    console.log("Intersection! " + event.detail.els);
     this.lastIntersections = event.detail;
+  },
+  
+  applyFilter: function(trackId, offset) {
+    if (!this.filters[trackId]) {
+      this.filters[trackId] = [];
+    }
+    console.log("Applying filter to track " + trackId + " at offset " + offset);
+    this.filters[trackId].push({
+      start: Math.max(0, offset - 300),
+      end: offset + 1700,
+      preset: 0
+    });
   }
 });
