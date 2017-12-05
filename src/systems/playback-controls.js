@@ -223,18 +223,32 @@ AFRAME.registerSystem('playback-controls', {
     if (previouslyActivated && !activated) {
       if (handEl.components.raycaster.intersectedEls.length != 0) {
         var closestObject = handEl.components.raycaster.intersectedEls[0];
-        var objectIndex = this.lastIntersections.els.indexOf(closestObject);
-        var intersection = this.lastIntersections.intersections[objectIndex];
-        // console.log("Found object!", intersection);
-        var intersectedStroke = this.sceneEl.systems.brush.strokes.find(function (stroke) {
-          return stroke.entity == closestObject;
-        });
-        var intersectedOffset = intersectedStroke.data.points[intersection.faceIndex].offset * 1000;
-        var intersectedTrack = intersectedStroke.track;
-        console.log("Intersected track " + intersectedTrack +
-          ". Playing offset: " + intersectedOffset +
-          ". Face index: " + intersection.faceIndex);
-        this.handleRayIntersection(intersectedTrack, intersectedOffset);
+        // var objectIndex = this.lastIntersections.els.indexOf(closestObject);
+        // var intersection = this.lastIntersections.intersections[objectIndex];
+        // var faceIndex = 0;
+        // if (intersection) {
+        //   faceIndex = intersection.faceIndex;
+        // }
+        // // console.log("Found object!", intersection);
+        // var intersectedStroke = this.sceneEl.systems.brush.strokes.find(function (stroke) {
+        //   return stroke.entity == closestObject;
+        // });
+        // var intersectedPoint = intersectedStroke.data.points[faceIndex];
+        // var intersectedOffset = intersectedPoint ? intersectedPoint.offset * 1000 : 0;
+        // var intersectedTrack = intersectedStroke.track;
+        // if (!intersection) {
+        //   console.log("Couldn't find intersection");
+        // } else if(!intersectedPoint) {
+        //   console.log("Couldn't find intersected point");
+        // }
+        // console.log("Intersected track " + intersectedTrack +
+        //   ". Playing offset: " + intersectedOffset +
+        //   ". Face index: " + faceIndex);
+        // this.handleRayIntersection(intersectedTrack, intersectedOffset);
+        
+        var intersectedTrack = closestObject.components.track.data.id
+        console.log("Intersected track " + intersectedTrack);
+        this.handleRayIntersection(intersectedTrack, 0);
       }
     }
   },

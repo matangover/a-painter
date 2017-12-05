@@ -102,7 +102,8 @@
               </a-entity>
       <a-entity id="cameraRig">
         <!-- camera -->
-        <a-entity id="acamera" camera orbit-controls universal-controls></a-entity>
+        <a-entity id="acamera" camera orbit-controls universal-controls></a-entity> 
+        <!-- universal-controls -->
         <!-- hand controls -->
         <a-entity id="left-hand"
                   disabled__brush
@@ -111,7 +112,7 @@
                   teleport-controls="cameraRig: #cameraRig; button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityLeft"
                   disabled__ui
                   brush="enabled: false; size: 0.05"
-                  aabb-collider="objects: .cube;" grab raycaster="far: 1; objects: .a-stroke"> <!--enabled: false; -->
+                  aabb-collider="objects: .cube;" grab raycaster="far: 3; objects: .cube"> <!--enabled: false; -->
                     <!-- <a-entity class="vive-tooltips" visible="false">
                       <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png"
                                 position="0.1 0.025 0.048"
@@ -173,7 +174,7 @@
                   teleport-controls="cameraRig: #cameraRig; button: trackpad; ground: #ground; hitCylinderColor: #ff3468; curveHitColor: #ff3468; curveMissColor: #333333; curveLineWidth: 0.01; hitEntity: #hitEntityRight"
                   disabled__ui
                   brush="enabled: false; size: 0.1"
-                  aabb-collider="objects: .cube;" grab raycaster="far: 1; objects: .a-stroke">
+                  aabb-collider="objects: .cube;" grab raycaster="far: 1; objects: .cube">
                     <!-- <a-entity class="vive-tooltips" visible="false">
                       <a-entity tooltip="text: Brush size\n(slide up/down); width: 0.1; height: 0.04; targetPosition: 0 0.016 0.0073; src: assets/images/tooltip.png"
                                 position="0.1 0.025 0.048"
