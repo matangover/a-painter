@@ -149,7 +149,8 @@ AFRAME.registerSystem('playback-controls', {
     var audio = this.getAudio(trackEl);
     audio.realStartTime = audio.context.currentTime;
     // TEMP: All tracks have something at 61 seconds.
-    this.playTrack(trackEl, 61);
+    //this.playTrack(trackEl, 61);
+    this.playTrack(trackEl, 0);
   },
   
   getAudio: function(trackEl) {
