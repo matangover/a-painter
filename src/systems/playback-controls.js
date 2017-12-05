@@ -14,6 +14,28 @@ AFRAME.registerSystem('playback-controls', {
     document.querySelector('#right-hand').addEventListener('triggerchanged', this.activatePlayingRay);
     document.querySelector('#right-hand').addEventListener('raycaster-intersection', this.onRayIntersection);
     //document.querySelector('#right-hand').addEventListener('menudown', this.onTogglePlaying);
+    var filterAssets = [
+      "assets/sounds/impulse-responses/filter-telephone.wav",
+      "assets/sounds/impulse-responses/comb-saw1.wav",
+      "assets/sounds/impulse-responses/filter-lopass160.wav",
+      "assets/sounds/impulse-responses/feedback-spring.wav"
+    ];
+    var loader = new THREE.AudioLoader();
+    
+    this.filterPresetAssets = [];
+    self = this;
+    filterAssets.forEach(function (url, index) {
+      loader.load(url, function(buffer) {
+        self.filterPresetAssets[index] = buffer;
+      });
+    });
+    // this.audioLoader.load(data.src, function (buffer) {
+    // this.filterPresetAssets = [
+    //   # telephone
+    //   # lowpass
+    //   # spring reverb
+    //   # comb filter
+    // ];
   },
   
   togglePlaying: function() {
@@ -100,6 +122,26 @@ AFRAME.registerSystem('playback-controls', {
         // if ()
       }
     });
+  },
+  
+  toggleFilter: function(trackId) {
+    if (this.filters[trackId] == undefined) {
+      this.filters[trackId] = 0;
+    } else {
+      this.filters[trackId] = (this.filters[trackId] + 1) % this.filterPresetAssets.length;
+    }
+    var trackEl = this.getTrackEl(trackId);
+    var audio = this.getAudio(trackEl);
+    if (!trackEl.convolver) {
+      convolver = audio.context.createConvolver();
+      gainNode2 = audio.context.createGain();
+      gainNode2.gain.value = 2.0;
+      audio.source.connect(convolver);
+      convolver.connect(gainNode2);
+      gainNode2.connect(audio.context.destination);
+      trackEl.convolver = convolver;
+    }
+    trackEl.convolver.buffer = this.filterPresetAssets[this.filters[trackId]];
   },
   
   ensureDoubleMaterial: function(stroke) {

@@ -123,7 +123,7 @@ AFRAME.registerSystem('painter', {
 
     // @fixme This is just for debug until we'll get some UI
     document.addEventListener('keyup', function (event) {
-      if(event.ctrlKey) return;
+      // if(event.ctrlKey) return;
       if (event.keyCode === 8) {
         // Undo (Backspace)
         self.brushSystem.undo();
@@ -180,7 +180,11 @@ AFRAME.registerSystem('painter', {
       if (event.shiftKey && event.keyCode >= 49 && event.keyCode <= 54) { // b - reset playback offset
         var trackIndex = event.keyCode - 49;
         var trackId = document.querySelectorAll('[track]')[trackIndex].getAttribute('track').id;
-        self.sceneEl.systems['playback-controls'].toggleTrackMute(trackId);
+        if (event.ctrlKey) {
+          self.sceneEl.systems['playback-controls'].toggleFilter(trackId);
+        } else {
+          self.sceneEl.systems['playback-controls'].toggleTrackMute(trackId);
+        }
       }
     });
 
