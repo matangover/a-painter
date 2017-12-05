@@ -55,13 +55,30 @@ AFRAME.registerComponent('grab', {
     var hitEl = this.hitEl;
     var position;
     if (!hitEl) { return; }
-    this.updateDelta();
+    // this.updateDelta();
     position = hitEl.getAttribute('position');
-    hitEl.setAttribute('position', {
-      x: position.x + this.deltaPosition.x,
-      y: position.y + this.deltaPosition.y,
-      z: position.z + this.deltaPosition.z
-    });
+    // hitEl.setAttribute('position', {
+    //   x: position.x + this.deltaPosition.x,
+    //   y: position.y + this.deltaPosition.y,
+    //   z: position.z + this.deltaPosition.z
+    // });
+    
+    
+    // var position = new THREE.Vector3();
+    // var rotation = new THREE.Quaternion();
+    // var scale = new THREE.Vector3();
+    // 
+    // return function tick (time, delta) {
+    //   if (this.currentStroke && this.active) {
+    //     this.obj.matrixWorld.decompose(position, rotation, scale);
+    //     var pointerPosition = this.system.getPointerPosition(position, rotation);
+
+    // hitEl.setAttribute('position', this.el.getAttribute('position')hitEl.sceneEl.systems.brush.getPointerPosition());
+    var worldPos = new THREE.Vector3();
+    worldPos.setFromMatrixPosition(this.el.object3D.matrixWorld);
+    hitEl.setAttribute('position', worldPos);
+
+    // hitEl.setAttribute('position', this.el.getAttribute('position'));
   },
 
   updateDelta: function () {
